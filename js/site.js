@@ -660,15 +660,20 @@
     els.slidesContainer.innerHTML = slides.map((s, i) => `
       <div class="slide ${i === 0 ? 'active' : ''}" data-slide-index="${i}" data-link="${escapeAttr(s.link || '')}">
         ${s.mediaType === 'video'
-          ? `<video src="${escapeAttr(s.mediaUrl)}" muted loop ${i === 0 ? 'autoplay' : ''} playsinline></video>`
+          ? `<video src="${escapeAttr(s.mediaUrl)}" controls playsinline preload="auto" ${i === 0 ? 'autoplay muted' : ''} style="width:100%;height:100%;object-fit:cover;background:#000;"></video>`
           : (s.mediaType === 'audio'
             ? `<div class="slide-audio-bg"><span class="slide-audio-icon">🎵</span><audio src="${escapeAttr(s.mediaUrl)}" loop ${i === 0 ? 'autoplay' : ''} controls style="position:relative;z-index:3;width:80%;max-width:300px;"></audio></div>`
             : `<img src="${escapeAttr(s.mediaUrl)}" alt="${escapeAttr(s.caption || '')}">`
           )
         }
-        <div class="slide-overlay">
-          ${s.caption ? `<div class="slide-caption">${escapeHtml(s.caption)}</div>` : ''}
-          ${s.description ? `<div class="slide-desc">${escapeHtml(s.description)}</div>` : ''}
+        <div class="slide-overlay" style="${s.mediaType === 'video' ? 'pointer-events:none;' : ''}">
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;">
+            <div>
+              ${s.caption ? `<div class="slide-caption">${escapeHtml(s.caption)}</div>` : ''}
+              ${s.description ? `<div class="slide-desc">${escapeHtml(s.description)}</div>` : ''}
+            </div>
+            ${s.mediaType === 'video' ? `<button class="slide-fullscreen-btn" data-slide-fs="${i}" title="ফুল স্ক্রিন" style="pointer-events:all;">⛶</button>` : ''}
+          </div>
         </div>
       </div>
     `).join('');
@@ -687,15 +692,46 @@
     if (els.slidesPrev) els.slidesPrev.onclick = () => goToSlide(slidesState.current - 1);
     if (els.slidesNext) els.slidesNext.onclick = () => goToSlide(slidesState.current + 1);
 
-    // Click on slide → open link OR modal detail
+    // Click on slide → open link (skip if clicking video or fullscreen btn)
     els.slidesContainer.querySelectorAll('.slide').forEach((slide, i) => {
-      slide.addEventListener('click', () => {
+      slide.addEventListener('click', (e) => {
+        if (e.target.closest('video') || e.target.closest('.slide-fullscreen-btn')) return;
         const link = slide.dataset.link;
-        if (link) {
-          window.open(link, '_blank');
-        }
+        if (link) window.open(link, '_blank');
       });
     });
+
+    // Fullscreen button
+    els.slidesContainer.querySelectorAll('.slide-fullscreen-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const idx = parseInt(btn.dataset.slideFs, 10);
+        const slide = els.slidesContainer.querySelectorAll('.slide')[idx];
+        const video = slide && slide.querySelector('video');
+        if (!video) return;
+        if (video.requestFullscreen) video.requestFullscreen();
+        else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
+        else if (video.mozRequestFullScreen) video.mozRequestFullScreen();
+      });
+    });
+
+    // Auto-play video when section scrolls into view
+    const slidesSec = document.querySelector('.fullvideo-section');
+    if (slidesSec) {
+      const secObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          const activeSlide = els.slidesContainer.querySelector('.slide.active');
+          const video = activeSlide && activeSlide.querySelector('video');
+          if (!video) return;
+          if (entry.isIntersecting) {
+            video.play().catch(() => {});
+          } else {
+            video.pause();
+          }
+        });
+      }, { threshold: 0.3 });
+      secObserver.observe(slidesSec);
+    }
 
     startAutoRotate();
   }
@@ -707,12 +743,11 @@
     slidesState.current = idx;
     const slidesEls = els.slidesContainer.querySelectorAll('.slide');
     slidesEls.forEach((el, i) => el.classList.toggle('active', i === idx));
-    // Restart video/audio of current; pause others
+    // Pause other videos; don't forcibly restart current (user has controls)
     slidesEls.forEach((el, i) => {
       const v = el.querySelector('video');
       if (v) {
-        if (i === idx) { v.currentTime = 0; v.play().catch(()=>{}); }
-        else v.pause();
+        if (i !== idx) v.pause();
       }
       const a = el.querySelector('audio');
       if (a) {

@@ -1,0 +1,42 @@
+// =============================================================
+//  Firebase Storage Rules — Exit Excit
+//  ---------------------------------------------------------
+//  ⚠️  এই rules শুধুমাত্র তখনই দরকার যখন আপনি Firebase Storage
+//      চালু করেছেন (যার জন্য Blaze / pay-as-you-go প্ল্যান লাগে)।
+//      কার্ড না থাকলে এই ফাইলটি স্কিপ করুন — admin panel তখনও
+//      কাজ করবে, শুধু ছবিগুলো Imgur / GitHub থেকে URL দিয়ে
+//      বসাতে হবে। README.md দেখুন।
+//  ---------------------------------------------------------
+//  Anyone can READ images (needed for public site).
+//  Only authenticated admins can UPLOAD/DELETE.
+// =============================================================
+
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && firestore.exists(
+        /databases/(default)/documents/admins/$(request.auth.uid)
+      ) && firestore.get(
+        /databases/(default)/documents/admins/$(request.auth.uid)
+      ).data.isAdmin == true;
+    }
+
+    // Public read for everything (app screenshots, slides, etc.)
+    match /{allPaths=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}
+
+// =============================================================
+//  HOW TO DEPLOY:
+//  Console: https://console.firebase.google.com → Storage → Rules → Paste → Publish
+// =============================================================

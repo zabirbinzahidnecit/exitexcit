@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exit Excit — Digital Solutions</title>
+<meta name="description" content="Exit Excit — বাংলাদেশী Digital Solutions কোম্পানি। বাস্তব সমস্যার সমাধানে তৈরি অ্যাপস।">
+
+<!-- CSS -->
+<link rel="stylesheet" href="css/style.css">
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="assets/logo.png">
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <img src="assets/logo.png" alt="Exit Excit Logo">
+    <span>EXIT EXCIT</span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#apps">আমাদের Apps</a></li>
+    <li><a href="#slides">প্রোডাক্ট হাইলাইটস</a></li>
+    <li><a href="#about">আমাদের সম্পর্কে</a></li>
+    <li><a href="#contact">যোগাযোগ</a></li>
+    <li><a href="admin.html" class="nav-admin-link" title="Admin Panel">🔒 Admin</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:14px;">
+    <a href="#contact" class="nav-cta">যোগাযোগ →</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+    <div class="hero-grid-lines"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge" data-hero-badge>🚀 Digital Solutions Company · Bangladesh</div>
+    <div class="hero-logo">
+      <img src="assets/logo.png" alt="Exit Excit">
+    </div>
+    <h1 data-hero-title>
+      <span class="gold">EXIT</span> <span class="green">EXCIT</span><br>
+      <span style="font-size:0.55em;color:rgba(255,255,255,0.75);font-weight:600;letter-spacing:1px;">DIGITAL SOLUTIONS</span>
+    </h1>
+    <p class="hero-tagline" data-hero-tagline>
+      আধুনিক প্রযুক্তি দিয়ে জীবনকে সহজ করে তুলি।<br>
+      আমাদের প্রতিটি app তৈরি হয় মানুষের বাস্তব সমস্যার সমাধান দিতে।
+    </p>
+    <div class="hero-stats" data-hero-stats></div>
+    <div class="hero-btns" data-hero-btns>
+      <a href="#apps" class="btn-primary">📱 আমাদের Apps দেখুন</a>
+      <a href="#contact" class="btn-secondary">✉️ যোগাযোগ করুন</a>
+    </div>
+  </div>
+</section>
+
+<!-- APPS -->
+<section class="apps-section" id="apps">
+  <div class="section-header">
+    <span class="section-label">আমাদের পণ্য</span>
+    <h2 class="section-title">আমাদের Apps</h2>
+    <p class="section-sub">প্রতিটি app তৈরি হয়েছে বাস্তব জীবনের সমস্যার কথা মাথায় রেখে। সহজে ব্যবহারযোগ্য, বিনামূল্যে।</p>
+  </div>
+  <div class="apps-grid" data-apps-grid>
+    <div class="loading-state" style="grid-column:1/-1;">
+      <div class="spinner"></div>
+      Apps লোড হচ্ছে...
+    </div>
+  </div>
+</section>
+
+<!-- SLIDESHOW / BIGGAPON / PRESENTATION -->
+<section class="slides-section" id="slides">
+  <div class="section-header">
+    <span class="section-label">হাইলাইটস</span>
+    <h2 class="section-title">প্রোডাক্ট প্রেজেন্টেশন</h2>
+    <p class="section-sub">আমাদের নতুন অ্যাপ ও ফিচারের স্লাইড ও ভিডিও দেখুন।</p>
+  </div>
+  <div class="slides-container" data-slides>
+    <div class="loading-state" style="background:#000;height:100%;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.5);">
+      <div class="spinner"></div>
+    </div>
+  </div>
+  <button class="slide-arrow prev" data-slides-prev aria-label="Previous">‹</button>
+  <button class="slide-arrow next" data-slides-next aria-label="Next">›</button>
+  <div class="slide-dots" data-slides-dots></div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-section" id="about">
+  <div class="about-grid" data-about-wrap>
+    <!-- Filled by site.js (renderAbout) -->
+    <div class="fade-in">
+      <span class="section-label" style="background:rgba(232,168,0,0.12);color:var(--gold-light);border-color:rgba(232,168,0,0.2);">আমাদের সম্পর্কে</span>
+      <h2 class="section-title">আমরা কে?</h2>
+      <p class="section-sub">
+        Exit Excit হলো একটি বাংলাদেশী Digital Solutions কোম্পানি। আমরা বিশ্বাস করি প্রযুক্তি দিয়ে সাধারণ মানুষের জীবন সহজ করা সম্ভব। আমাদের প্রতিটি পণ্য তৈরি হয় বাস্তব সমস্যার কথা মাথায় রেখে।
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="section-header">
+    <span class="section-label navy-label">যোগাযোগ</span>
+    <h2 class="section-title">আমাদের সাথে কথা বলুন</h2>
+    <p class="section-sub">কোনো প্রশ্ন, পরামর্শ বা সহযোগিতার জন্য যোগাযোগ করুন। আমরা সাড়া দিতে সদা প্রস্তুত।</p>
+  </div>
+  <div class="contact-grid" data-contact-wrap>
+    <!-- Filled by site.js (renderContact) -->
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo">
+        <img src="assets/logo.png" alt="Exit Excit">
+        <span>EXIT EXCIT</span>
+      </div>
+      <p class="footer-tagline" style="margin-top:8px;">Digital Solutions · Made in Bangladesh 🇧🇩</p>
+    </div>
+    <div class="footer-links">
+      <a href="#home">হোম</a>
+      <a href="#apps">Apps</a>
+      <a href="#slides">হাইলাইটস</a>
+      <a href="#about">আমাদের সম্পর্কে</a>
+      <a href="#contact">যোগাযোগ</a>
+      <a href="admin.html" class="nav-admin-link">🔒 Admin</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© <span id="year"></span> <span class="footer-gold">Exit Excit</span>. সর্বস্বত্ব সংরক্ষিত।</p>
+    <p>Made with ❤️ in Bangladesh</p>
+  </div>
+</footer>
+
+<!-- JS -->
+<script src="js/firebase-config.js"></script>
+<script src="js/firebase-init.js"></script>
+<script src="js/site.js"></script>
+
+<script>
+  // Auto-update copyright year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Mobile nav toggle
+  (function() {
+    const toggle = document.getElementById('navToggle');
+    const links = document.getElementById('navLinks');
+    if (!toggle || !links) return;
+    toggle.addEventListener('click', () => {
+      links.classList.toggle('open');
+    });
+    // Close menu when a link is clicked
+    links.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => links.classList.remove('open'));
+    });
+  })();
+
+  // Nav scrolled state
+  (function() {
+    const nav = document.querySelector('nav');
+    if (!nav) return;
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 40) nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
+    }, { passive: true });
+  })();
+
+  // Intersection Observer for fade-in elements (also handled in site.js for dynamic content)
+  (function() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  })();
+</script>
+
+</body>
+</html>

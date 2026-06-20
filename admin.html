@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Exit Excit</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="assets/logo.png">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<!-- ============================================================
+     LOGIN SCREEN
+     ============================================================ -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-bg-shape s1"></div>
+  <div class="login-bg-shape s2"></div>
+  <div class="login-card">
+    <div class="login-logo"><img src="assets/logo.png" alt="Exit Excit"></div>
+    <h1 class="login-title">Admin Panel</h1>
+    <p class="login-subtitle">Exit Excit — Digital Solutions</p>
+    <div class="login-error" id="loginError"></div>
+    <form id="loginForm" autocomplete="off">
+      <div class="form-group">
+        <label>ইমেইল</label>
+        <input type="email" id="loginEmail" placeholder="admin@exitexcit.com" required>
+      </div>
+      <div class="form-group">
+        <label>পাসওয়ার্ড</label>
+        <input type="password" id="loginPass" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="btn-block" id="loginBtn">🔓 লগ ইন করুন</button>
+    </form>
+    <a href="index.html" class="login-back">← ওয়েবসাইটে ফিরে যান</a>
+  </div>
+</div>
+
+<!-- ============================================================
+     ADMIN APP
+     ============================================================ -->
+<div class="admin-app" id="adminApp">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">
+      <img src="assets/logo.png" alt="Exit Excit">
+      <span>EXIT EXCIT</span>
+    </div>
+    <ul class="sidebar-nav">
+      <li><a data-tab="dashboard" class="active"><span class="nav-icon">📊</span><span>ড্যাশবোর্ড</span></a></li>
+      <li><a data-tab="apps"><span class="nav-icon">📱</span><span>Apps</span></a></li>
+      <li><a data-tab="slides"><span class="nav-icon">🎬</span><span>স্লাইডস</span></a></li>
+      <li><a data-tab="hero"><span class="nav-icon">🏠</span><span>হোম / হিরো</span></a></li>
+      <li><a data-tab="about"><span class="nav-icon">ℹ️</span><span>আমাদের সম্পর্কে</span></a></li>
+      <li><a data-tab="contact"><span class="nav-icon">✉️</span><span>যোগাযোগ</span></a></li>
+      <li><a data-tab="messages"><span class="nav-icon">💬</span><span>মেসেজ</span><span class="nav-badge" id="msgBadge" style="display:none;">0</span></a></li>
+    </ul>
+    <div class="sidebar-footer">
+      <div class="sidebar-user-email" id="userEmail"></div>
+      <button class="sidebar-logout" id="logoutBtn">🚪 <span>লগ আউট</span></button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+
+    <!-- DASHBOARD -->
+    <section class="admin-section active" id="tab-dashboard">
+      <div class="admin-header">
+        <div>
+          <h1>ড্যাশবোর্ড</h1>
+          <p>Exit Excit — Admin Overview</p>
+        </div>
+        <a href="index.html" target="_blank" class="btn-secondary">🔗 ওয়েবসাইট দেখুন</a>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📱</div>
+          <div class="stat-num" id="statApps">—</div>
+          <div class="stat-label">মোট Apps</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-icon">🎬</div>
+          <div class="stat-num" id="statSlides">—</div>
+          <div class="stat-label">মোট স্লাইডস</div>
+        </div>
+        <div class="stat-card blue">
+          <div class="stat-icon">💬</div>
+          <div class="stat-num" id="statMessages">—</div>
+          <div class="stat-label">নতুন মেসেজ</div>
+        </div>
+        <div class="stat-card red">
+          <div class="stat-icon">🟢</div>
+          <div class="stat-num" id="statLive">—</div>
+          <div class="stat-label">Live Apps</div>
+        </div>
+      </div>
+      <div class="admin-card">
+        <div class="admin-card-title">সাম্প্রতিক মেসেজ</div>
+        <div class="admin-card-desc">সর্বশেষ ৫টি মেসেজ</div>
+        <div id="recentMessages" class="list-card">
+          <div class="list-empty">লোড হচ্ছে...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- APPS -->
+    <section class="admin-section" id="tab-apps">
+      <div class="admin-header">
+        <div>
+          <h1>Apps ব্যবস্থাপনা</h1>
+          <p>নতুন app যোগ করুন, এডিট করুন, সাজান</p>
+        </div>
+        <button class="btn-primary" id="addAppBtn">➕ নতুন App</button>
+      </div>
+      <div class="alert-banner">
+        <strong>💡 টিপ:</strong> App যোগ করার সময় সব তথ্য পূরণ করুন। <code>visible: false</code> রাখলে app পাবলিক সাইটে দেখাবে না। অর্ডার ছোট হলে আগে দেখাবে।
+      </div>
+      <div class="alert-banner" style="background:#DBEAFE;border-left-color:#2563EB;border-color:rgba(37,99,235,0.3);">
+        <strong>📷 ছবি যোগ করার নিয়ম:</strong> Firebase Storage চালু না থাকলেও সমস্যা নেই —
+        ছবি <a href="https://imgur.com/upload" target="_blank" style="color:#2563EB;">Imgur</a> এ আপলোড করে
+        "Direct link" (যেমন <code>https://i.imgur.com/xyz.jpg</code>) কপি করে URL বক্সে দিন।
+        বিস্তারিত README তে।
+      </div>
+      <div id="appsList" class="list-card">
+        <div class="list-empty">লোড হচ্ছে...</div>
+      </div>
+    </section>
+
+    <!-- SLIDES -->
+    <section class="admin-section" id="tab-slides">
+      <div class="admin-header">
+        <div>
+          <h1>স্লাইড / প্রেজেন্টেশন</h1>
+          <p>বিজ্ঞাপন, প্রোডাক্ট হাইলাইটস, ভিডিও</p>
+        </div>
+        <button class="btn-primary" id="addSlideBtn">➕ নতুন স্লাইড</button>
+      </div>
+      <div class="alert-banner">
+        <strong>ℹ️ তথ্য:</strong> স্লাইড হিসেবে ছবি অথবা ভিডিও যোগ করতে পারেন। ভিডিও সরাসরি URL দিতে হবে (mp4 লিংক)। স্লাইডে ক্লিক করলে নির্দিষ্ট লিংকে যাওয়ার সুবিধা আছে।
+      </div>
+      <div class="alert-banner" style="background:#DBEAFE;border-left-color:#2563EB;border-color:rgba(37,99,235,0.3);">
+        <strong>📷 মিডিয়া যোগ করার নিয়ম:</strong> Firebase Storage চালু না থাকলেও সমস্যা নেই —
+        ছবি <a href="https://imgur.com/upload" target="_blank" style="color:#2563EB;">Imgur</a> এ আপলোড করে
+        URL দিন। ভিডিও হলে <a href="https://imgur.com/upload" target="_blank" style="color:#2563EB;">Imgur</a>
+        বা অন্য কোথাও আপলোড করে mp4 direct URL দিন।
+      </div>
+      <div id="slidesList" class="list-card">
+        <div class="list-empty">লোড হচ্ছে...</div>
+      </div>
+    </section>
+
+    <!-- HERO -->
+    <section class="admin-section" id="tab-hero">
+      <div class="admin-header">
+        <div>
+          <h1>হোম / হিরো সেকশন</h1>
+          <p>ওয়েবসাইটের প্রথম পেজের কন্টেন্ট</p>
+        </div>
+      </div>
+      <div class="admin-card">
+        <div class="admin-card-title">হিরো কন্টেন্ট এডিট করুন</div>
+        <div class="admin-card-desc">ব্যাজ, টাইটেল, ট্যাগলাইন, পরিসংখ্যান, বাটন টেক্সট</div>
+        <form id="heroForm">
+          <div class="form-grid">
+            <div class="full">
+              <label>ব্যাজ টেক্সট</label>
+              <input type="text" id="heroBadge" placeholder="🚀 Digital Solutions Company · Bangladesh">
+            </div>
+            <div>
+              <label>টাইটেল — সোনালি অংশ</label>
+              <input type="text" id="heroTitleGold" placeholder="EXIT">
+            </div>
+            <div>
+              <label>টাইটেল — সবুজ অংশ</label>
+              <input type="text" id="heroTitleGreen" placeholder="EXCIT">
+            </div>
+            <div class="full">
+              <label>সাব-টাইটেল</label>
+              <input type="text" id="heroTitleSub" placeholder="DIGITAL SOLUTIONS">
+            </div>
+            <div class="full">
+              <label>ট্যাগলাইন (নতুন লাইনের জন্য Enter ব্যবহার করুন)</label>
+              <textarea id="heroTagline" rows="3"></textarea>
+            </div>
+            <div>
+              <label>প্রাইমারি বাটন টেক্সট</label>
+              <input type="text" id="heroBtn1" placeholder="📱 আমাদের Apps দেখুন">
+            </div>
+            <div>
+              <label>সেকেন্ডারি বাটন টেক্সট</label>
+              <input type="text" id="heroBtn2" placeholder="✉️ যোগাযোগ করুন">
+            </div>
+          </div>
+          <h4 style="margin:20px 0 8px;color:var(--navy-dark);font-size:0.92rem;">পরিসংখ্যান (Stats)</h4>
+          <div id="heroStatsRepeater"></div>
+          <button type="button" class="repeater-add" id="addHeroStat">➕ Stat যোগ করুন</button>
+          <div style="margin-top:24px;">
+            <button type="submit" class="btn-primary">💾 সেভ করুন</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="admin-section" id="tab-about">
+      <div class="admin-header">
+        <div>
+          <h1>আমাদের সম্পর্কে সেকশন</h1>
+          <p>কোম্পানি পরিচিতি, মূল্যবোধ, টেক স্ট্যাক</p>
+        </div>
+      </div>
+      <div class="admin-card">
+        <form id="aboutForm">
+          <div class="form-grid">
+            <div class="full">
+              <label>সেকশন লেবেল</label>
+              <input type="text" id="aboutLabel" placeholder="আমাদের সম্পর্কে">
+            </div>
+            <div class="full">
+              <label>টাইটেল</label>
+              <input type="text" id="aboutTitle" placeholder="আমরা কে?">
+            </div>
+            <div class="full">
+              <label>বিবরণ</label>
+              <textarea id="aboutSub" rows="4"></textarea>
+            </div>
+          </div>
+          <h4 style="margin:20px 0 8px;color:var(--navy-dark);font-size:0.92rem;">মূল্যবোধ (Values)</h4>
+          <div id="aboutValuesRepeater"></div>
+          <button type="button" class="repeater-add" id="addAboutValue">➕ Value যোগ করুন</button>
+
+          <h4 style="margin:20px 0 8px;color:var(--navy-dark);font-size:0.92rem;">টেক পিলস (Tech Pills)</h4>
+          <div id="techPillsRepeater"></div>
+          <button type="button" class="repeater-add" id="addTechPill">➕ Tech Pill যোগ করুন</button>
+
+          <div style="margin-top:24px;">
+            <button type="submit" class="btn-primary">💾 সেভ করুন</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="admin-section" id="tab-contact">
+      <div class="admin-header">
+        <div>
+          <h1>যোগাযোগ তথ্য</h1>
+          <p>ইমেইল, ফোন, ঠিকানা, লিংক</p>
+        </div>
+      </div>
+      <div class="admin-card">
+        <form id="contactForm">
+          <div class="form-grid">
+            <div>
+              <label>ইমেইল</label>
+              <input type="email" id="contactEmail" placeholder="contact@exitexcit.com">
+            </div>
+            <div>
+              <label>ফোন (দেখানোর জন্য)</label>
+              <input type="text" id="contactPhone" placeholder="+880 1X-XXXX-XXXX">
+            </div>
+            <div>
+              <label>ফোন লিংক (tel: এর জন্য)</label>
+              <input type="text" id="contactPhoneLink" placeholder="+8801XXXXXXXXX">
+            </div>
+            <div>
+              <label>ঠিকানা</label>
+              <input type="text" id="contactAddress" placeholder="Dhaka, Bangladesh">
+            </div>
+            <div>
+              <label>GitHub (দেখানোর জন্য)</label>
+              <input type="text" id="contactGithub" placeholder="github.com/username">
+            </div>
+            <div>
+              <label>GitHub লিংক</label>
+              <input type="text" id="contactGithubLink" placeholder="https://github.com/username">
+            </div>
+            <div class="full">
+              <label>নোট টাইটেল</label>
+              <input type="text" id="contactNoteTitle" placeholder="⚡ দ্রুত সাড়া পান!">
+            </div>
+            <div class="full">
+              <label>নোট বডি</label>
+              <textarea id="contactNoteBody" rows="3"></textarea>
+            </div>
+          </div>
+          <div style="margin-top:24px;">
+            <button type="submit" class="btn-primary">💾 সেভ করুন</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- MESSAGES -->
+    <section class="admin-section" id="tab-messages">
+      <div class="admin-header">
+        <div>
+          <h1>ব্যবহারকারী মেসেজ</h1>
+          <p>কন্টাক্ট ফর্ম থেকে আসা সব মেসেজ</p>
+        </div>
+        <button class="btn-secondary" id="refreshMessagesBtn">🔄 রিফ্রেশ</button>
+      </div>
+      <div id="messagesList" class="list-card">
+        <div class="list-empty">লোড হচ্ছে...</div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Generic modal host -->
+<div class="modal-overlay" id="modalHost"></div>
+
+<!-- JS -->
+<script src="js/firebase-config.js"></script>
+<script src="js/firebase-init.js"></script>
+<script src="js/admin.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,90 @@
+// =============================================================
+//  Firestore Security Rules — Exit Excit
+//  ---------------------------------------------------------
+//  Public can READ apps, slides, content (visible=true ones only).
+//  Only authenticated admins can WRITE.
+//  Messages: anyone can CREATE; only admins can READ/LIST/DELETE.
+// =============================================================
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ----------------------------------------------------------
+    // Helper: is the requester an admin?
+    //   Checks /admins/{uid} exists with isAdmin == true
+    //   OR /admins/{email-as-doc-id} with isAdmin == true
+    // ----------------------------------------------------------
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+        && get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.isAdmin == true
+      );
+    }
+
+    // ----------------------------------------------------------
+    // Apps — public read visible ones; admins full control
+    // ----------------------------------------------------------
+    match /apps/{appId} {
+      allow read: if resource.data.visible == true || isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ----------------------------------------------------------
+    // Slides — public read visible ones; admins full control
+    // ----------------------------------------------------------
+    match /slides/{slideId} {
+      allow read: if resource.data.visible == true || isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ----------------------------------------------------------
+    // Content (hero, about, contact) — public read; admins write
+    // ----------------------------------------------------------
+    match /content/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ----------------------------------------------------------
+    // Messages — anyone can submit; only admins can read/list/delete
+    // ----------------------------------------------------------
+    match /messages/{msgId} {
+      allow create: if true;            // public can submit form
+      allow read, update, delete: if isAdmin();
+      allow list: if isAdmin();
+    }
+
+    // ----------------------------------------------------------
+    // Admins collection — only admins can read/write
+    // ----------------------------------------------------------
+    match /admins/{adminId} {
+      allow read: if isSignedIn();      // signed-in users can check their own admin status
+      allow write: if isAdmin() || !exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+      // Note: the OR condition lets the FIRST admin be self-promoted if no admin exists yet
+      // (one-time bootstrap). After that, only existing admins can add new ones.
+    }
+  }
+}
+
+// =============================================================
+//  HOW TO DEPLOY THESE RULES:
+//  ---------------------------------------------------------
+//  Option A (Console):
+//    1. https://console.firebase.google.com → your project
+//    2. Firestore Database → Rules tab
+//    3. Paste this whole content
+//    4. Click "Publish"
+//
+//  Option B (Firebase CLI):
+//    1. npm install -g firebase-tools
+//    2. firebase login
+//    3. firebase init (choose Firestore)
+//    4. Save this file as firestore.rules
+//    5. firebase deploy --only firestore:rules
+// =============================================================

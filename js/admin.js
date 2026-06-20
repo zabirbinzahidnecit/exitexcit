@@ -1468,6 +1468,13 @@
     document.body.style.overflow = '';
   }
 
+  function closeGhPicker() {
+    const host = $('#ghPickerHost');
+    if (!host) return;
+    host.classList.remove('open');
+    host.innerHTML = '';
+  }
+
   function formatDate(ts) {
     if (!ts) return 'এইমাত্র';
     const d = ts.toDate ? ts.toDate() : new Date(ts);
@@ -1546,13 +1553,14 @@
       </div>
     `;
 
-    const host = $('#modalHost');
+    const host = $('#ghPickerHost');
     host.innerHTML = html;
     host.classList.add('open');
     document.body.style.overflow = 'hidden';
 
-    $('#ghPickerClose').onclick = closeModal;
-    $('#ghPickerCancel').onclick = closeModal;
+    $('#ghPickerClose').onclick = closeGhPicker;
+    $('#ghPickerCancel').onclick = closeGhPicker;
+    host.addEventListener('click', e => { if (e.target === host) closeGhPicker(); });
 
     // Fetch file list from GitHub API
     fetch(apiUrl)
@@ -1627,7 +1635,7 @@
             e.stopPropagation();
             const url = this.getAttribute('data-url');
             const name = this.getAttribute('data-name');
-            closeModal();
+            closeGhPicker();
             if (onPick) onPick(url, name);
           });
         });

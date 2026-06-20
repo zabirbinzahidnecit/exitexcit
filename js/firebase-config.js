@@ -58,8 +58,8 @@ window.firebaseConfig = firebaseConfig;
 // ============================================================
 
 window.githubConfig = {
-  owner: 'zabirbinzahidnecit',   // ← apnar GitHub username
-  repo: 'exitexcit',         // ← apnar repo name (e.g. exitexcit.github.io)
+  owner: 'zabirbinzahidnecit',      // GitHub username
+  repo: 'exitexcit',               // repo name
   branch: 'main',                  // usually 'main' or 'master'
   imagesPath: 'images',            // images/ folder path repo te
   videosPath: 'videos',            // videos/ folder path repo te

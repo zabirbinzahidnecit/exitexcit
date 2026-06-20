@@ -1603,9 +1603,9 @@
               const rawUrl = getGithubRawUrl(f.name, type);
               let thumb;
               if (type === 'video') {
-                thumb = `<div class="gh-file-thumb"><span style="font-size:2rem;">🎬</span></div>`;
+                thumb = `<div class="gh-file-thumb"><span style="font-size:2.5rem;">🎬</span></div>`;
               } else if (type === 'audio') {
-                thumb = `<div class="gh-file-thumb"><span style="font-size:2rem;">🎵</span></div>`;
+                thumb = `<div class="gh-file-thumb"><span style="font-size:2.5rem;">🎵</span></div>`;
               } else {
                 thumb = `<div class="gh-file-thumb"><img src="${escapeHtml(rawUrl)}" alt="" onerror="this.parentNode.innerHTML='<span>📄</span>'"></div>`;
               }
@@ -1614,20 +1614,22 @@
                   ${thumb}
                   <div class="gh-file-name">${escapeHtml(f.name)}</div>
                   <div class="gh-file-size">${formatFileSize(f.size)}</div>
+                  <button type="button" class="gh-select-btn" data-url="${escapeHtml(rawUrl)}" data-name="${escapeHtml(f.name)}">✅ সিলেক্ট করুন</button>
                 </div>
               `;
             }).join('')}
           </div>
         `;
 
-        // Bind clicks
-        list.querySelectorAll('.gh-file-item').forEach(item => {
-          item.onclick = () => {
-            const url = item.dataset.url;
-            const name = item.dataset.name;
-            if (onPick) onPick(url, name);
+        // Bind select buttons directly
+        list.querySelectorAll('.gh-select-btn').forEach(btn => {
+          btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const url = this.getAttribute('data-url');
+            const name = this.getAttribute('data-name');
             closeModal();
-          };
+            if (onPick) onPick(url, name);
+          });
         });
       })
       .catch(err => {

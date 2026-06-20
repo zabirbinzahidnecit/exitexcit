@@ -760,3 +760,25 @@ html, body {
   animation: admin-spin 0.8s linear infinite;
 }
 @keyframes admin-spin { to { transform: rotate(360deg); } }
+
+/* ─── GH SELECT BUTTON ─── */
+.gh-select-btn {
+  display: block;
+  width: 100%;
+  margin-top: 7px;
+  padding: 6px 4px;
+  background: linear-gradient(135deg, var(--navy), var(--navy-light));
+  color: var(--white);
+  border: none;
+  border-radius: 7px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  font-family: inherit;
+}
+.gh-select-btn:hover {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--navy-dark);
+  transform: translateY(-1px);
+}

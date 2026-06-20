@@ -1475,6 +1475,13 @@
     host.innerHTML = '';
   }
 
+  function closeIconPicker() {
+    const host = $('#iconPickerHost');
+    if (!host) return;
+    host.classList.remove('open');
+    host.innerHTML = '';
+  }
+
   function formatDate(ts) {
     if (!ts) return 'এইমাত্র';
     const d = ts.toDate ? ts.toDate() : new Date(ts);
@@ -1715,10 +1722,11 @@
       </div>
     `;
 
-    const host = $('#modalHost');
+    const host = $('#iconPickerHost');
     host.innerHTML = html;
     host.classList.add('open');
     document.body.style.overflow = 'hidden';
+    host.onclick = e => { if (e.target === host) closeIconPicker(); };
 
     let chosenIcon = currentIcon || '📦';
 
@@ -1747,14 +1755,14 @@
       $('#iconEmoji').value = '';
     });
 
-    // GitHub picker
+    // GitHub picker (separate overlay, no conflict)
     const ghBtn = $('#iconGithubBtn');
     if (ghBtn) {
       ghBtn.onclick = () => {
         openGithubPicker('image', (url, name) => {
           chosenIcon = url;
-          $('#iconUrl').value = url;
-          $('#iconEmoji').value = '';
+          if ($('#iconUrl')) $('#iconUrl').value = url;
+          if ($('#iconEmoji')) $('#iconEmoji').value = '';
           updatePreview(url);
           toast('আইকন নির্বাচিত: ' + name, 'success');
         });
@@ -1789,8 +1797,8 @@
       };
     }
 
-    $('#iconPickerClose').onclick = closeModal;
-    $('#iconPickerCancel').onclick = closeModal;
+    $('#iconPickerClose').onclick = closeIconPicker;
+    $('#iconPickerCancel').onclick = closeIconPicker;
 
     $('#iconPickerSave').onclick = () => {
       const emoji = $('#iconEmoji').value.trim();
@@ -1799,8 +1807,8 @@
       if (url) finalIcon = url;
       else if (emoji) finalIcon = emoji;
       else finalIcon = chosenIcon || '📦';
+      closeIconPicker();
       if (onPick) onPick(finalIcon);
-      closeModal();
     };
   }
 
